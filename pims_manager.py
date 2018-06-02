@@ -1,4 +1,6 @@
 import os
+import webbrowser
+import openpyxl
 
 def 시작():
     선택 = 0
@@ -219,6 +221,7 @@ def 개인검색_추가설정():
     print('1. 추가작업을 하지않고 넘어감')
     print('2. 인터넷으로 인물검색')
     print('3. 엑셀파일에 입력')
+    print()
 
     추가선택 = int(input('선택 >> '))
 
@@ -232,11 +235,22 @@ def 개인검색_추가설정():
     elif 추가선택 == 2:
         print()
         print('인터넷 검색창을 출력합니다.')
+        개인검색_추가설정_인터넷검색()
 
     elif 추가선택 == 3:
         print()
         print('엑셀파일에 데이터를 추가합니다.')
+        개인검색_추가설정_엑셀파일입력()
+
   
+def 개인검색_추가설정_인터넷검색():
+    print('임시데이터')
+    
+
+
+def 개인검색_추가설정_엑셀파일입력():
+    
+    excel_document = openpyxl.load_workbook('학생정보.xlsx')
 
 
 
