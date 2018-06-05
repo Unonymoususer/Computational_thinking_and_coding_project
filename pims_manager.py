@@ -184,7 +184,7 @@ def 개인검색():
     읽기모드파일.close()
 
 
-# 작업할것
+
 def 수정():
     print()    
     입력받은_학번 = input('학번을 입력해주세요: ')
@@ -258,8 +258,6 @@ def 수정():
     워크북.save('학생정보.xlsx')
 
 
-    
-
     if 발견 == '발견함':
         print('학생 정보가 업데이트되었습니다.')
     else:
@@ -301,6 +299,48 @@ def 삭제():
 
     os.remove('학생정보.txt')
     os.rename('임시파일.txt', '학생정보.txt')
+
+
+
+    입력받은_학번 = int(입력받은_학번)
+
+    워크북_읽기 = xlrd.open_workbook('학생정보.xlsx')
+    워크시트 = 워크북_읽기.sheet_by_index(0)
+    학생수 = 워크시트.nrows
+    
+    워크북 = load_workbook('학생정보.xlsx')
+    워크시트 = 워크북.active
+
+
+    for 순번 in range(1,학생수+1):
+        학번 = 워크시트.cell(row = 순번, column = 1).value
+        이름 = 워크시트.cell(row = 순번, column = 2).value
+        학과 = 워크시트.cell(row = 순번, column = 3).value
+        주소 = 워크시트.cell(row = 순번, column = 4).value
+
+        if 입력받은_학번 == 학번:
+            워크시트.cell(row = 순번, column = 1).value = ''
+            워크시트.cell(row = 순번, column = 2).value = ''
+            워크시트.cell(row = 순번, column = 3).value = ''
+            워크시트.cell(row = 순번, column = 4).value = ''
+            순번기록 = 순번
+        else:
+            워크시트.cell(row = 순번, column = 1).value = 학번
+            워크시트.cell(row = 순번, column = 2).value = 이름
+            워크시트.cell(row = 순번, column = 3).value = 학과
+            워크시트.cell(row = 순번, column = 4).value = 주소
+
+    for 순번기록 in range(순번기록, 학생수+1):
+            워크시트.cell(row = 순번기록, column = 1).value = 워크시트.cell(row = 순번기록+1, column = 1).value
+            워크시트.cell(row = 순번기록, column = 2).value = 워크시트.cell(row = 순번기록+1, column = 2).value
+            워크시트.cell(row = 순번기록, column = 3).value = 워크시트.cell(row = 순번기록+1, column = 3).value
+            워크시트.cell(row = 순번기록, column = 4).value = 워크시트.cell(row = 순번기록+1, column = 4).value
+        
+
+    워크북.save('학생정보.xlsx')
+
+
+    
 
     if 발견 == '발견함':
         print('회원 정보가 삭제되었습니다.')
