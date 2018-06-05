@@ -176,7 +176,6 @@ def 개인검색():
         학번 = 읽기모드파일.readline()
 
     if 발견 == '발견함':
-        #개인검색_추가설정()
         개인검색_추가설정(학번리스트,이름리스트,학과리스트,주소리스트)
 
     elif 발견 == '발견못함':
@@ -185,9 +184,11 @@ def 개인검색():
     읽기모드파일.close()
 
 
+# 작업할것
 def 수정():
     print()    
     입력받은_학번 = input('학번을 입력해주세요: ')
+    입력받은_학과 = input(입력받은_학번 + '의 새로운 학과를 입력해주세요: ')
     입력받은_주소 = input(입력받은_학번 + '의 새로운 주소를 입력해주세요: ')
 
     읽기모드파일 = open('학생정보.txt', 'r')
@@ -208,7 +209,7 @@ def 수정():
         if 입력받은_학번 == 학번:
             임시파일.write(학번 + '\n')
             임시파일.write(이름 + '\n')
-            임시파일.write(학과 + '\n')
+            임시파일.write(입력받은_학과 + '\n')
             임시파일.write(입력받은_주소 + '\n')
             발견 = '발견함'
         else:
@@ -225,12 +226,47 @@ def 수정():
     os.remove('학생정보.txt')
     os.rename('임시파일.txt', '학생정보.txt')
 
+
+
+    입력받은_학번 = int(입력받은_학번)
+
+    워크북_읽기 = xlrd.open_workbook('학생정보.xlsx')
+    워크시트 = 워크북_읽기.sheet_by_index(0)
+    학생수 = 워크시트.nrows
+    
+    워크북 = load_workbook('학생정보.xlsx')
+    워크시트 = 워크북.active
+
+
+    for 순번 in range(1,학생수+1):
+        학번 = 워크시트.cell(row = 순번, column = 1).value
+        이름 = 워크시트.cell(row = 순번, column = 2).value
+        학과 = 워크시트.cell(row = 순번, column = 3).value
+        주소 = 워크시트.cell(row = 순번, column = 4).value
+
+        if 입력받은_학번 == 학번:
+            워크시트.cell(row = 순번, column = 1).value = 학번
+            워크시트.cell(row = 순번, column = 2).value = 이름
+            워크시트.cell(row = 순번, column = 3).value = 입력받은_학과
+            워크시트.cell(row = 순번, column = 4).value = 입력받은_주소
+        else:
+            워크시트.cell(row = 순번, column = 1).value = 학번
+            워크시트.cell(row = 순번, column = 2).value = 이름
+            워크시트.cell(row = 순번, column = 3).value = 학과
+            워크시트.cell(row = 순번, column = 4).value = 주소            
+
+    워크북.save('학생정보.xlsx')
+
+
+    
+
     if 발견 == '발견함':
         print('학생 정보가 업데이트되었습니다.')
     else:
         print('학번에 대한 정보가 없어 업데이트를 하지 못하였습니다.')      
 
 
+# 작업할것
 def 삭제():
     print()
     입력받은_학번 = input('학번을 입력해주세요: ')
